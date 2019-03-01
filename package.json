@@ -4,7 +4,8 @@
   "description": "Solution to Luma Test Technical challenge",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon ./index.js --exec babel-node --presets es2015 -e js"
   },
   "repository": {
     "type": "git",
@@ -21,13 +22,15 @@
   },
   "homepage": "https://github.com/hiteshsantwani/Luma_Health#readme",
   "dependencies": {
+    "babel-preset-es2015": "^6.24.1",
+    "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "mongoose": "^5.4.16",
     "nodemon": "^1.18.10"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
-    "babel-preset": "^1.0.3",
-    "babel-preset-env": "^1.7.0"
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1"
   }
 }
