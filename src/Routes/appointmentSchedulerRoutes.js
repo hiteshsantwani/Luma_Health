@@ -1,24 +1,33 @@
+import { 
+    addNewContact, 
+    getContacts, 
+    getContactWithID, 
+    updateContact,
+    deleteContact 
+} from '../controllers/appointmentSchedulerController';
+
+
 const routes = (app) => {
     app.route('/contact')
-    .get((req, res, next) =>{
-        //Midleware
-        console.log(`Request From: ${req.originalUrl}`)
+    .get((req, res, next) => {
+        // middleware
+        console.log(`Request from: ${req.originalUrl}`)
         console.log(`Request type: ${req.method}`)
-        next(); 
-    }, (req, res, next) => {
-        res.send('Get Request Successfull!!!');
-    })
-
-    .post((req, res) =>
-    res.send('Post Request Successfull!!!'));
+        next();
+    }, getContacts)
+    
+    // POST endpoint
+    .post(addNewContact);
 
     app.route('/contact/:contactId')
-    .put((req, res) =>
-    res.send('Put Request Successfull!!!'))
+    // get specific contact
+    .get(getContactWithID)
+    
+    // put request
+    .put(updateContact)
 
-    .delete((req, res) =>
-    res.send('Delete Request Successfull!!!'));
-
+    // delete request
+    .delete(deleteContact);
 }
 
 export default routes;
