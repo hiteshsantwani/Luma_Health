@@ -2,9 +2,9 @@ import mongoose from 'mongoose';
 const util = require('util');
 
 import { AppointmentDetailsSchema,
-         AvailabiltySchedule,
+         AvailabiltyScheduleSchema,
          DoctorDetailsSchema,
-         PatientDetailsSchema,
+         PatientDetailsSchema
          } from '../models/appointmentSchedulerModels';
 
 
@@ -13,24 +13,17 @@ import { AppointmentDetailsSchema,
 const Doctor_Detail = mongoose.model('Doctor_Detail', DoctorDetailsSchema);
 const Patient_Detail = mongoose.model('Patient_Detail', PatientDetailsSchema);
 const Appointment_Detail = mongoose.model('Appointment_Detail', AppointmentDetailsSchema);
+const Availabilty_Schedule = mongoose.model('Availabilty_Schedule', AvailabiltyScheduleSchema);
 
-
-export const getDoctor= (req, res) => {
-    Doctor.find({}, (err, Doctor) => {
-        if (err) {
-            res.send(err);
-        }
-        res.json(Doctor_Detail);
-    });
-};
 
 export const addNewDoctor = (req, res) => {
-    console.log('inside addNewDoctor')
-    console.log("request: "+JSON.stringify(req));
-
+    console.log(`Request data: ${req.body}`)
 
     let newDoctor = new Doctor_Detail({
-
+        Doctor_email : req.body.Doctor_email,
+        F_name : req.body.F_name,
+        L_name : req.body.L_name,
+        Speciality : req.body.Speciality
     });
     newDoctor.save((err, newDoctor) => {
         if (err) {
@@ -41,9 +34,14 @@ export const addNewDoctor = (req, res) => {
 };
 
 export const addNewPatient = (req, res) => {
-    let newPatient = new Patient_Detail(req.body);
+    let newPatient = new Patient_Detail({
+        Patient_phone : req.body.Patient_phone,
+        F_name : req.body.F_name,
+        L_name : req.body.L_name,
+        Appointment_Dates : req.body.Appointment_Dates
+    });
 
-    newDoctor.save((err, newPatient) => {
+    newPatient.save((err, newPatient) => {
         if (err) {
             res.send(err);
         }
@@ -52,7 +50,11 @@ export const addNewPatient = (req, res) => {
 };
 
 export const addNewAppointment = (req, res) => {
-    let newAppointment = new Appointment_Detail(req.body);
+    let newAppointment = new Appointment_Detail({
+        A_Date : req.body.A_Date,
+        Doctor_email : req.body.Doctor_email,
+        Patient_phone : req.body.Patient_phone
+    });
 
     newAppointment.save((err, newAppointment) => {
         if (err) {
@@ -62,6 +64,22 @@ export const addNewAppointment = (req, res) => {
     });
 };
 
+export const addNewAvailabiltySchedule = (req, res) => {
+    let newAvailabiltySchedule = new Availabilty_Schedule({
+        Date : req.body.Date,
+        Doctor_email : req.body.Doctor_email,
+        F_name : req.body.F_name,
+        L_name : req.body.L_name,
+        Timing : req.body.Timing
+    });
+
+    newAvailabiltySchedule.save((err, newAvailabiltySchedule) => {
+        if (err) {
+            res.send(err);
+        }
+        res.json(newAvailabiltySchedule);
+    });
+};
 
 // export const addNewContact = (req, res) => {
 //     let newContact = new Contact(req.body);

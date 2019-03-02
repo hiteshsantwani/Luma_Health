@@ -5,10 +5,11 @@ const Schema = mongoose.Schema;
 export const AppointmentDetailsSchema = new Schema({
       A_Date: {
         type: Date,
+        unique: true,
         default: Date.now
       },
       Doctor_email: {
-        type: Number,
+        type: String,
         required: true
       },
       Patient_phone: {
@@ -17,7 +18,7 @@ export const AppointmentDetailsSchema = new Schema({
       }
 });
 
-export const AvailabiltySchedule = new Schema({
+export const AvailabiltyScheduleSchema = new Schema({
 
     Date: {
       type: Date,
