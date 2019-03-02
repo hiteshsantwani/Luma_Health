@@ -1,33 +1,32 @@
-// import { 
-//     addNewContact, 
-//     getContacts, 
-//     getContactWithID, 
-//     updateContact,
-//     deleteContact 
-// } from '../controllers/appointmentSchedulerController';
+import { 
+    addNewDoctor, 
+    addNewPatient, 
+    addNewAppointment, 
+    getDoctor
+} from '../controllers/appointmentSchedulerController';
 
 
-// const routes = (app) => {
-//     app.route('/contact')
-//     .get((req, res, next) => {
-//         // middleware
-//         console.log(`Request from: ${req.originalUrl}`)
-//         console.log(`Request type: ${req.method}`)
-//         next();
-//     }, getContacts)
+const routes = (app) => {
+    app.route('/AddDoctor')
+    .get((req, res, next) => {
+        // middleware
+        console.log(`Request from: ${req.originalUrl}`)
+        console.log(`Request type: ${req.method}`)
+        next();
+    }, addNewDoctor)
     
-//     // POST endpoint
-//     .post(addNewContact);
+    // POST endpoint
+    .post(addNewDoctor);
 
-//     app.route('/contact/:contactId')
-//     // get specific contact
-//     .get(getContactWithID)
+    app.route('/Doctor/:doctorId')
+    // get specific contact
+    .get(getDoctor)
     
-//     // put request
-//     .put(updateContact)
+    // put request
+    .put(updateContact)
 
-//     // delete request
-//     .delete(deleteContact);
-// }
+    // delete request
+    .delete(deleteContact);
+}
 
-// export default routes;
+export default routes;
