@@ -3,113 +3,49 @@ import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 export const AppointmentDetailsSchema = new Schema({
-    Appointment_id: {
-        type: Number,
-        required: true,
-        index: true,
-        unique: true
-      },
       A_Date: {
         type: Date,
         default: Date.now
       },
-      Doctor_id: {
+      Doctor_email: {
         type: Number,
         required: true
       },
-      Patient_id: {
+      Patient_phone: {
         type: Number,
         required: true
       }
 });
 
-export const DayScheduleSchema = new Schema({
-    1: {
-        type: String
-      },
-    2: {
-        type: String
-      },
-    3: {
-        type: String
-      },
-    4: {
-        type: String
-      },
-    5: {
-        type: String
-      },
-    9: {
-        type: String
-      },
-    10: {
-        type: String
-      },
-    11: {
-        type: String
-      },
-    12: {
-        type: String
-      }
-});
+export const AvailabiltySchedule = new Schema({
 
-export const AvailabilityDetailsSchema = new Schema({
-      Monday: {
-        type: DayScheduleSchema
-      },
-      Tuesday: {
-        type: DayScheduleSchema
-      },
-      Wednesday: {
-        type: DayScheduleSchema
-      },
-      Thursday: {
-        type: DayScheduleSchema
-      },
-      Friday: {
-        type: DayScheduleSchema
-      },
-      Saturday: {
-        type: DayScheduleSchema
-      },
-      Sunday: {
-        type: DayScheduleSchema
-      }
-});
-
-export const ScheduleDetailsSchema = new Schema({
-    Monday: {
-      type: DayScheduleSchema
+    Date: {
+      type: Date,
+      unique: true,
+      required: 'Enter a first name'
     },
-    Tuesday: {
-      type: DayScheduleSchema
+    Doctor_email: {
+        type: String,
+        required: true,
+      },
+    F_name: {
+        type: String,
+        required: 'Enter a first name'
+      },
+    L_name: {
+      type: String,
+      required: 'Enter a Last name'
     },
-    Wednesday: {
-      type: DayScheduleSchema
-    },
-    Thursday: {
-      type: DayScheduleSchema
-    },
-    Friday: {
-      type: DayScheduleSchema
-    },
-    Saturday: {
-      type: DayScheduleSchema
-    },
-    Sunday: {
-      type: DayScheduleSchema
+    Timing: {
+      type: [Number],
+      required: 'Enter Times available'
     }
 });
 
 export const DoctorDetailsSchema = new Schema({
-    Availability: {
-        type: AvailabilityDetailsSchema,
-        required: true
-      },
-      Doctor_id: {
-        type: Number,
+      Doctor_email: {
+        type: String,
         required: true,
-        index: true,
         unique: true
       },
       F_name: {
@@ -120,10 +56,6 @@ export const DoctorDetailsSchema = new Schema({
         type: String,
         required: 'Enter a Last name'
       },
-      Schedule: {
-          type: ScheduleDetailsSchema,
-          required: true
-      },
       Speciality: {
         type: String,
         required: 'Enter a Speciality'
@@ -131,10 +63,9 @@ export const DoctorDetailsSchema = new Schema({
 });
 
 export const PatientDetailsSchema = new Schema({
-    Patient_id: {
+    Patient_phone: {
         type: Number,
         required: true,
-        index: true,
         unique: true
       },
       F_name: {
@@ -145,11 +76,8 @@ export const PatientDetailsSchema = new Schema({
         type: String,
         required: 'Enter a first name'
       },
-      Schedule: {
-          type: ScheduleDetailsSchema,
-          required: true
-      },
-      Appointment_ids: {
-        type: [Number]
+      Appointment_Dates: {
+        type: [Date],
+        required: 'Enter a Appointment Dates'
       }
 });

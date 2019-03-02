@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
+const util = require('util');
+
 import { AppointmentDetailsSchema,
-         DayScheduleSchema,
-         AvailabilityDetailsSchema,
-         ScheduleDetailsSchema,
+         AvailabiltySchedule,
          DoctorDetailsSchema,
          PatientDetailsSchema,
          } from '../models/appointmentSchedulerModels';
@@ -12,9 +12,6 @@ import { AppointmentDetailsSchema,
 
 const Doctor_Detail = mongoose.model('Doctor_Detail', DoctorDetailsSchema);
 const Patient_Detail = mongoose.model('Patient_Detail', PatientDetailsSchema);
-const Availability = mongoose.model('Availability', AvailabilityDetailsSchema);
-const Schedule = mongoose.model('Schedule', ScheduleDetailsSchema);
-const DaySchedule = mongoose.model('DaySchedule', DayScheduleSchema);
 const Appointment_Detail = mongoose.model('Appointment_Detail', AppointmentDetailsSchema);
 
 
@@ -29,13 +26,11 @@ export const getDoctor= (req, res) => {
 
 export const addNewDoctor = (req, res) => {
     console.log('inside addNewDoctor')
+    console.log("request: "+JSON.stringify(req));
+
+
     let newDoctor = new Doctor_Detail({
-        Doctor_id : req.body.Doctor_id,
-        F_name : req.body.F_name,
-        L_name : req.body.L_name,
-        Schedule : req.body.Schedule,
-        Speciality : req.body.Speciality,
-        Availability : req.body.Availability
+
     });
     newDoctor.save((err, newDoctor) => {
         if (err) {
