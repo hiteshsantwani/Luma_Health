@@ -18,15 +18,15 @@ const routes = (app) => {
     // POST endpoint
     .post(addNewDoctor);
 
-    app.route('/Doctor/:doctorId')
-    // get specific contact
-    .get(getDoctor)
+    // app.route('/Doctor/:doctorId')
+    // // get specific contact
+    // .get(getDoctor);
     
-    // put request
-    .put(updateContact)
+    // // // put request
+    // // .put(updateDoctor)
 
-    // delete request
-    .delete(deleteContact);
+    // // // delete request
+    // // .delete(deleteDoctort);
 }
 
 export default routes;

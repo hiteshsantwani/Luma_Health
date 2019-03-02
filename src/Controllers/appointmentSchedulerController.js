@@ -9,16 +9,34 @@ import { AppointmentDetailsSchema,
 
 
 //const Contact = mongoose.model('Contact', ContactSchema);
-const Doctor = mongoose.model('Doctor', DoctorDetailsSchema);
-const Patient = mongoose.model('Patient', PatientDetailsSchema);
+
+const Doctor_Detail = mongoose.model('Doctor_Detail', DoctorDetailsSchema);
+const Patient_Detail = mongoose.model('Patient_Detail', PatientDetailsSchema);
 const Availability = mongoose.model('Availability', AvailabilityDetailsSchema);
 const Schedule = mongoose.model('Schedule', ScheduleDetailsSchema);
 const DaySchedule = mongoose.model('DaySchedule', DayScheduleSchema);
-const Appointment = mongoose.model('Appointment', AppointmentDetailsSchema);
+const Appointment_Detail = mongoose.model('Appointment_Detail', AppointmentDetailsSchema);
+
+
+export const getDoctor= (req, res) => {
+    Doctor.find({}, (err, Doctor) => {
+        if (err) {
+            res.send(err);
+        }
+        res.json(Doctor_Detail);
+    });
+};
 
 export const addNewDoctor = (req, res) => {
-    let newDoctor = new Doctor(req.body);
-
+    console.log('inside addNewDoctor')
+    let newDoctor = new Doctor_Detail({
+        Doctor_id : req.body.Doctor_id,
+        F_name : req.body.F_name,
+        L_name : req.body.L_name,
+        Schedule : req.body.Schedule,
+        Speciality : req.body.Speciality,
+        Availability : req.body.Availability
+    });
     newDoctor.save((err, newDoctor) => {
         if (err) {
             res.send(err);
@@ -28,7 +46,7 @@ export const addNewDoctor = (req, res) => {
 };
 
 export const addNewPatient = (req, res) => {
-    let newPatient = new Patient(req.body);
+    let newPatient = new Patient_Detail(req.body);
 
     newDoctor.save((err, newPatient) => {
         if (err) {
@@ -39,7 +57,7 @@ export const addNewPatient = (req, res) => {
 };
 
 export const addNewAppointment = (req, res) => {
-    let newAppointment = new Appointment(req.body);
+    let newAppointment = new Appointment_Detail(req.body);
 
     newAppointment.save((err, newAppointment) => {
         if (err) {
@@ -48,6 +66,8 @@ export const addNewAppointment = (req, res) => {
         res.json(newAppointment);
     });
 };
+
+
 // export const addNewContact = (req, res) => {
 //     let newContact = new Contact(req.body);
 

@@ -27,7 +27,7 @@ mongoose.connect(`mongodb://${server}/${database}`)
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
-//routes(app);
+routes(app);
 
 app.get('/', (req, res) =>
 
@@ -35,6 +35,7 @@ res.send(`Node and Express Server is running on port ${port}`)
 
 );
 
+//to do: When deploying this application need to undersatnd how to get the open port dynamicallt
 app.listen(port, () =>
 console.log(`your server is running on port ${port}`)
 );
