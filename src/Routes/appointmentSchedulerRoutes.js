@@ -2,10 +2,11 @@ import {
     addNewDoctor, 
     addNewPatient, 
     addNewAppointment, 
-    addNewAvailabiltySchedule
+    addNewAvailabiltySchedule,
+    getDoctorByEmail
 } from '../controllers/appointmentSchedulerController';
 
-
+// CREATE
 const routes = (app) => {
     app.route('/AddDoctor')
     .post((req, res, next) => {
@@ -38,15 +39,16 @@ const routes = (app) => {
         console.log(`Request type: ${req.method}`)
         next();
     }, addNewAvailabiltySchedule)
-    // app.route('/Doctor/:doctorId')
-    // // get specific contact
-    // .get(getDoctor);s
-    
-    // // // put request
-    // // .put(updateDoctor)
 
-    // // // delete request
-    // // .delete(deleteDoctort);
+// READ
+    app.route('/getDoctorByEmail/:Email')
+    .get((req, res, next) => {
+        // middleware
+        console.log(`Request from: ${req.originalUrl}`)
+        console.log(`Request type: ${req.method}`)
+        next();
+    }, getDoctorByEmail);
+    
 }
 
 export default routes;

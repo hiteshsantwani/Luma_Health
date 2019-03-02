@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+var uniqueValidator = require('mongoose-unique-validator');
 
 const Schema = mongoose.Schema;
 
