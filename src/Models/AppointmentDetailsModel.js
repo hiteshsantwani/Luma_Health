@@ -1,13 +1,12 @@
 var mongoose = require('mongoose');
 var uniqueValidator = require('mongoose-unique-validator');
-var slug = require('slug');
+// var slug = require('slug');
 
 const Schema = mongoose.Schema;
 
 var  AppointmentDetailsSchema = new Schema({
       A_Date: {
         type: Date,
-        unique: true,
         default: Date.now
       },
       Doctor_email: {
@@ -20,4 +19,14 @@ var  AppointmentDetailsSchema = new Schema({
       }
 });
 
-AppointmentDetailsSchema.plugin(uniqueValidator, {message: 'is already taken'});
+
+AppointmentDetailsSchema.methods.toJSONFor = function(){
+    return {
+        A_Date: this.A_Date,
+        Doctor_email: this.Doctor_email,
+        Patient_phone: this.Patient_phone
+    };
+  };
+
+mongoose.model('Appointment_Detail', AppointmentDetailsSchema);
+

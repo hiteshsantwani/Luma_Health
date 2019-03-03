@@ -1,19 +1,16 @@
 import mongoose from 'mongoose';
 const util = require('util');
 
-import { AppointmentDetailsSchema,
-         AvailabiltyScheduleSchema,
-         DoctorDetailsSchema,
-         PatientDetailsSchema
-         } from '../models/appointmentSchedulerModels';
+require('../Models/AppointmentDetailsModel');
+require('../Models/AvailabiltyScheduleModel');
+require('../Models/DoctorDetailsModel');
+require('../Models/PatientDetailsModel');
 
 
-//const Contact = mongoose.model('Contact', ContactSchema);
-
-const Doctor_Detail = mongoose.model('Doctor_Detail', DoctorDetailsSchema);
-const Patient_Detail = mongoose.model('Patient_Detail', PatientDetailsSchema);
-const Appointment_Detail = mongoose.model('Appointment_Detail', AppointmentDetailsSchema);
-const Availabilty_Schedule = mongoose.model('Availabilty_Schedule', AvailabiltyScheduleSchema);
+const Doctor_Detail = mongoose.model('Doctor_Detail');
+const Patient_Detail = mongoose.model('Patient_Detail');
+const Appointment_Detail = mongoose.model('Appointment_Detail');
+const Availabilty_Schedule = mongoose.model('Availabilty_Schedule');
 
 
 export const addNewDoctor = (req, res) => {
@@ -82,8 +79,9 @@ export const addNewAvailabiltySchedule = (req, res) => {
 };
 
 export const getDoctorByEmail = (req, res) => {
+    console.log(`Email searching: ${req.Email}`)
     Doctor_Detail.find({Doctor_email : req.Email}, function (err, product) {
         if (err) return next(err);
-        res.send(Doctor_Detail);
+        return res.json({Doctor_Detail: req.Doctor_Detail.toJSONFor()});
     })
 };
