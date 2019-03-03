@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha --timeout 10000",
+    "dev": "nodemon ./index.js",
     "start": "nodemon ./index.js --exec babel-node --presets es2015 -e js"
   },
   "repository": {

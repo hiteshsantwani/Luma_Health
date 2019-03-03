@@ -19,7 +19,6 @@ var  AppointmentDetailsSchema = new Schema({
       }
 });
 
-
 AppointmentDetailsSchema.methods.toJSONFor = function(){
     return {
         A_Date: this.A_Date,

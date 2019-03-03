@@ -21,7 +21,11 @@ var DoctorDetailsSchema = new Schema({
     Speciality: {
       type: String,
       required: 'Enter a Speciality'
-    }
+    },
+    Availabilty: [{
+      Day: Date,
+      Available: String
+    }]
 });
 
 DoctorDetailsSchema.plugin(uniqueValidator, {message: 'is already taken'});
@@ -31,7 +35,8 @@ DoctorDetailsSchema.methods.toJSONFor = function(){
         Doctor_email: this.Doctor_email,
         F_name: this.F_name,
         L_name: this.L_name,
-        Speciality: this.Speciality
+        Speciality: this.Speciality,
+        Availabilty: this.Availabilty
     };
   };
   

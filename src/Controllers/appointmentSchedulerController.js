@@ -16,12 +16,16 @@ const Availabilty_Schedule = mongoose.model('Availabilty_Schedule');
 export const addNewDoctor = (req, res) => {
     console.log(`Request data: ${req.body}`)
 
-    let newDoctor = new Doctor_Detail({
-        Doctor_email : req.body.Doctor_email,
-        F_name : req.body.F_name,
-        L_name : req.body.L_name,
-        Speciality : req.body.Speciality
-    });
+    // let newDoctor = new Doctor_Detail({
+    //     Doctor_email : req.body.Doctor_email,
+    //     F_name : req.body.F_name,
+    //     L_name : req.body.L_name,
+    //     Speciality : req.body.Speciality,
+    // },
+    // { $push: { Availabilty: req.body.Availabilty } }
+    // );
+    let newDoctor = new Doctor_Detail(req.body)
+
     newDoctor.save((err, newDoctor) => {
         if (err) {
             res.send(err);
@@ -31,13 +35,7 @@ export const addNewDoctor = (req, res) => {
 };
 
 export const addNewPatient = (req, res) => {
-    let newPatient = new Patient_Detail({
-        Patient_phone : req.body.Patient_phone,
-        F_name : req.body.F_name,
-        L_name : req.body.L_name,
-        Appointment_Dates : req.body.Appointment_Dates
-    });
-
+    let newPatient = new Patient_Detail(req.body)
     newPatient.save((err, newPatient) => {
         if (err) {
             res.send(err);
@@ -79,9 +77,19 @@ export const addNewAvailabiltySchedule = (req, res) => {
 };
 
 export const getDoctorByEmail = (req, res) => {
-    console.log(`Email searching: ${req.Email}`)
-    Doctor_Detail.find({Doctor_email : req.Email}, function (err, product) {
-        if (err) return next(err);
-        return res.json({Doctor_Detail: req.Doctor_Detail.toJSONFor()});
-    })
+    console.log(`Email searching: ${req.params.Email}`);
+  
+    Doctor_Detail.find({Doctor_email : req.params.Email}, function (err, data) {
+        if (err) return console.log(err);
+        return res.json(data);
+    });
+};
+
+export const getPatient = (req, res) => {
+    console.log(`PH_no searching: ${req.params.Ph_no}`);
+  
+    Patient_Detail.find({Patient_phone : req.params.Ph_no}, function (err, data) {
+        if (err) return console.log(err);
+        return res.json(data);
+    });
 };

@@ -18,10 +18,10 @@ var PatientDetailsSchema = new Schema({
         type: String,
         required: 'Enter a first name'
       },
-      Appointment_Dates: {
-        type: [Date],
-        required: 'Enter a Appointment Dates'
-      }
+      Appointment_Dates: [{
+        Date: Date,
+        Doctor_email: String
+      }]
 });
 
 PatientDetailsSchema.plugin(uniqueValidator, {message: 'is already taken'});

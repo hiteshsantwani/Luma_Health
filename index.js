@@ -24,7 +24,7 @@ mongoose.connect(`mongodb://${server}/${database}`)
        });
 
 // bodyparser setup
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 routes(app);

@@ -3,11 +3,13 @@ import {
     addNewPatient, 
     addNewAppointment, 
     addNewAvailabiltySchedule,
-    getDoctorByEmail
+    getDoctorByEmail,
+    getPatient
 } from '../controllers/appointmentSchedulerController';
 
 // CREATE
 const routes = (app) => {
+ 
     app.route('/AddDoctor')
     .post((req, res, next) => {
         // middleware
@@ -46,9 +48,18 @@ const routes = (app) => {
         // middleware
         console.log(`Request from: ${req.originalUrl}`)
         console.log(`Request type: ${req.method}`)
+        console.log(`Email: ${req.params.Email}`)
         next();
     }, getDoctorByEmail);
     
+    app.route('/getPatient/:Ph_no')
+    .get((req, res, next) => {
+        // middleware
+        console.log(`Request from: ${req.originalUrl}`)
+        console.log(`Request type: ${req.method}`)
+        console.log(`Ph_no: ${req.params.Ph_no}`)
+        next();
+    }, getPatient);
 }
 
 export default routes;
