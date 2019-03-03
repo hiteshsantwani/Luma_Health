@@ -5,6 +5,7 @@ var uniqueValidator = require('mongoose-unique-validator');
 const Schema = mongoose.Schema;
 
 var PatientDetailsSchema = new Schema({
+
     Patient_phone: {
         type: Number,
         required: true,

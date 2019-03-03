@@ -23,7 +23,7 @@ var DoctorDetailsSchema = new Schema({
       required: 'Enter a Speciality'
     },
     Availabilty: [{
-      Day: String,
+      Day: Date,
       Available: String
     }]
 });

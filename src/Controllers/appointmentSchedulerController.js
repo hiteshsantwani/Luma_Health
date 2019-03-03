@@ -114,10 +114,18 @@ export const bookDoctorOpening = (req, res) => {
   
     Doctor_Detail.find({Doctor_email : req.body.Email}).exec(function (err, data) {
         if (err) return console.log(err);
-        
         data.forEach(element => {
-            console.log(`Element: ${element.Availabilty[0]}`)
-            //.imgs.push(element);
+            if(element.Availabilty != undefined){
+                var arr = element.Availabilty;
+                for(var i = 0; i < arr.length; i++){
+                    var str = JSON.stringify(arr[i]);
+                    var jsonval = JSON.parse(str);
+                    var day = jsonval.Day;
+                    var Available = jsonval.Available;
+                    console.log(`Day: ${day}`)
+                    console.log(`Avail: ${Available}`)
+                }
+            }
           });
     });
 };
