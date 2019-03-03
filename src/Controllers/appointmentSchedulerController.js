@@ -98,3 +98,18 @@ export const getAppointment = (req, res) => {
         return res.json(data);
     });
 };
+
+export const getWorkingHoursDoctor = (req, res) => {
+    console.log(`Email searching: ${req.params.Email}`);
+  
+    Doctor_Detail.find({Doctor_email : req.params.Email}, 'Availabilty', function (err, data) {
+        if (err) return console.log(err);
+        console.log(`data: ${data}`)
+        // var string = JSON.stringify(data);
+        // console.log(`string: ${string}`)
+        // var objectValue = JSON.parse(res.json(data));
+        // console.log(`objectValue: ${objectValue}`)
+        
+        return res.json(data)
+    });
+};

@@ -5,7 +5,8 @@ import {
     addNewAvailabiltySchedule,
     getDoctorByEmail,
     getPatient,
-    getAppointment
+    getAppointment,
+    getWorkingHoursDoctor
 } from '../controllers/appointmentSchedulerController';
 
 // CREATE
@@ -70,6 +71,16 @@ const routes = (app) => {
         console.log(`Ph_no: ${req.params.Ph_no}`)
         next();
     }, getAppointment);
+
+// API
+    app.route('/getWorkingHoursDoctor/:Email')
+    .get((req, res, next) => {
+        // middleware
+        console.log(`Request from: ${req.originalUrl}`)
+        console.log(`Request type: ${req.method}`)
+        next();
+    }, getWorkingHoursDoctor);
+
 }
 
 
