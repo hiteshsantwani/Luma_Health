@@ -4,7 +4,8 @@ import {
     addNewAppointment, 
     addNewAvailabiltySchedule,
     getDoctorByEmail,
-    getPatient
+    getPatient,
+    getAppointment
 } from '../controllers/appointmentSchedulerController';
 
 // CREATE
@@ -60,6 +61,16 @@ const routes = (app) => {
         console.log(`Ph_no: ${req.params.Ph_no}`)
         next();
     }, getPatient);
+
+    app.route('/getAppointment/:Doctor_Email/:Patient_phone')
+    .get((req, res, next) => {
+        // middleware
+        console.log(`Request from: ${req.originalUrl}`)
+        console.log(`Request type: ${req.method}`)
+        console.log(`Ph_no: ${req.params.Ph_no}`)
+        next();
+    }, getAppointment);
 }
+
 
 export default routes;

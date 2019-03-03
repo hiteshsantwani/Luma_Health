@@ -45,11 +45,7 @@ export const addNewPatient = (req, res) => {
 };
 
 export const addNewAppointment = (req, res) => {
-    let newAppointment = new Appointment_Detail({
-        A_Date : req.body.A_Date,
-        Doctor_email : req.body.Doctor_email,
-        Patient_phone : req.body.Patient_phone
-    });
+    let newAppointment = new Appointment_Detail(req.body)
 
     newAppointment.save((err, newAppointment) => {
         if (err) {
@@ -89,6 +85,15 @@ export const getPatient = (req, res) => {
     console.log(`PH_no searching: ${req.params.Ph_no}`);
   
     Patient_Detail.find({Patient_phone : req.params.Ph_no}, function (err, data) {
+        if (err) return console.log(err);
+        return res.json(data);
+    });
+};
+
+export const getAppointment = (req, res) => {
+    console.log(`PH_no searching: ${req.params.Patient_phone}`);
+  
+    Appointment_Detail.find({Patient_phone : req.params.Patient_phone}, function (err, data) {
         if (err) return console.log(err);
         return res.json(data);
     });
