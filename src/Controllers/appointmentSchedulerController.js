@@ -104,12 +104,21 @@ export const getWorkingHoursDoctor = (req, res) => {
   
     Doctor_Detail.find({Doctor_email : req.params.Email}, 'Availabilty', function (err, data) {
         if (err) return console.log(err);
-        console.log(`data: ${data}`)
-        // var string = JSON.stringify(data);
-        // console.log(`string: ${string}`)
-        // var objectValue = JSON.parse(res.json(data));
-        // console.log(`objectValue: ${objectValue}`)
         
         return res.json(data)
     });
 };
+
+export const bookDoctorOpening = (req, res) => {
+    console.log(`Email searching: ${req.body.Email}`);
+  
+    Doctor_Detail.find({Doctor_email : req.body.Email}).exec(function (err, data) {
+        if (err) return console.log(err);
+        
+        data.forEach(element => {
+            console.log(`Element: ${element.Availabilty[0]}`)
+            //.imgs.push(element);
+          });
+    });
+};
+

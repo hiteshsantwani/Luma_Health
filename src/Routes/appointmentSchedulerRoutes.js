@@ -6,7 +6,8 @@ import {
     getDoctorByEmail,
     getPatient,
     getAppointment,
-    getWorkingHoursDoctor
+    getWorkingHoursDoctor,
+    bookDoctorOpening
 } from '../controllers/appointmentSchedulerController';
 
 // CREATE
@@ -80,6 +81,14 @@ const routes = (app) => {
         console.log(`Request type: ${req.method}`)
         next();
     }, getWorkingHoursDoctor);
+
+    app.route('/bookWorkingHoursDoctor')
+    .post((req, res, next) => {
+        // middleware
+        console.log(`Request from: ${req.originalUrl}`)
+        console.log(`Request type: ${req.method}`)
+        next();
+    }, bookDoctorOpening);
 
 }
 
