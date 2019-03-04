@@ -1,11 +1,15 @@
-
- 
+var http = require('http'),
+    path = require('path'),
+    bodyParser = require('body-parser'),
+    express = require('express'),
+    mongoose = require('mongoose'),
+    cors = require('cors');
+    
 import routes from "./src/Routes/appointmentSchedulerRoutes";
-import express from "express";
-import mongoose from "mongoose";
-import bodyParser from "body-parser";
 
 const app = express();
+app.use(cors());
+
 const port = 3000;
 
 // to do: Move configuration to external file
