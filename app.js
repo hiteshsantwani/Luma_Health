@@ -12,6 +12,16 @@ app.use(cors());
 
 const port = 3000;
 
+// ======================================= Basic Error Handling =================
+
+/// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
+});
+// ==============================================================================
+
 // to do: Move configuration to external file
 // mongoose connection
 

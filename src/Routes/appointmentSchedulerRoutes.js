@@ -2,7 +2,6 @@ import {
     addNewDoctor, 
     addNewPatient, 
     addNewAppointment, 
-    addNewAvailabiltySchedule,
     getDoctorByEmail,
     getPatient,
     getAppointment,
@@ -10,9 +9,10 @@ import {
     bookDoctorOpening
 } from '../controllers/appointmentSchedulerController';
 
-// CREATE
+
 const routes = (app) => {
- 
+    
+// CREATE
     app.route('/AddDoctor')
     .post((req, res, next) => {
         // middleware
@@ -37,13 +37,6 @@ const routes = (app) => {
         next();
     }, addNewAppointment)
 
-    app.route('/AddAvailability')
-    .post((req, res, next) => {
-        // middleware
-        console.log(`Request from: ${req.originalUrl}`)
-        console.log(`Request type: ${req.method}`)
-        next();
-    }, addNewAvailabiltySchedule)
 
 // READ
     app.route('/getDoctorByEmail/:Email')

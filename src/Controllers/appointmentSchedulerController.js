@@ -3,7 +3,6 @@ const util = require('util');
 var moment = require('moment');
 
 require('../Models/AppointmentDetailsModel');
-require('../Models/AvailabiltyScheduleModel');
 require('../Models/DoctorDetailsModel');
 require('../Models/PatientDetailsModel');
 
@@ -11,8 +10,7 @@ require('../Models/PatientDetailsModel');
 const Doctor_Detail = mongoose.model('Doctor_Detail');
 const Patient_Detail = mongoose.model('Patient_Detail');
 const Appointment_Detail = mongoose.model('Appointment_Detail');
-const Availabilty_Schedule = mongoose.model('Availabilty_Schedule');
-
+ 
 
 export const addNewDoctor = (req, res) => {
     console.log(`Request data: ${req.body}`)
@@ -56,23 +54,7 @@ export const addNewAppointment = (req, res) => {
     });
 };
 
-export const addNewAvailabiltySchedule = (req, res) => {
-    let newAvailabiltySchedule = new Availabilty_Schedule({
-        Date : req.body.Date,
-        Doctor_email : req.body.Doctor_email,
-        F_name : req.body.F_name,
-        L_name : req.body.L_name,
-        Timing : req.body.Timing
-    });
-
-    newAvailabiltySchedule.save((err, newAvailabiltySchedule) => {
-        if (err) {
-            res.send(err);
-        }
-        res.json(newAvailabiltySchedule);
-    });
-};
-
+// to do : As a library we are not sure if the email parameter will be in the params or in the body
 export const getDoctorByEmail = (req, res) => {
     console.log(`Email searching: ${req.params.Email}`);
   
@@ -82,6 +64,7 @@ export const getDoctorByEmail = (req, res) => {
     });
 };
 
+// to do : As a library we are not sure if the ph_no parameter will be in the params or in the body
 export const getPatient = (req, res) => {
     console.log(`PH_no searching: ${req.params.Ph_no}`);
   
@@ -91,6 +74,7 @@ export const getPatient = (req, res) => {
     });
 };
 
+// to do : As a library we are not sure if the ph_no and Email parameter will be in the params or in the body
 export const getAppointment = (req, res) => {
     console.log(`PH_no searching: ${req.params.Patient_phone}`);
   
@@ -101,7 +85,7 @@ export const getAppointment = (req, res) => {
 };
 
 export const getWorkingHoursDoctor = (req, res) => {
-    console.log(`Email searching: ${req.params.Email}`);
+    console.log(`Searching Doctor By Email: ${req.params.Email}`);
   
     Doctor_Detail.find({Doctor_email : req.params.Email}, 'Availabilty', function (err, data) {
         if (err) return console.log(err);

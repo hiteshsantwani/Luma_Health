@@ -1,6 +1,5 @@
 var mongoose = require('mongoose');
 var uniqueValidator = require('mongoose-unique-validator');
-// var slug = require('slug');
 
 const Schema = mongoose.Schema;
 
@@ -11,12 +10,10 @@ var DoctorDetailsSchema = new Schema({
       unique: true
     },
     F_name: {
-      type: String,
-      required: 'Enter a first name'
+      type: String
     },
     L_name: {
-      type: String,
-      required: 'Enter a Last name'
+      type: String
     },
     Speciality: {
       type: String,
