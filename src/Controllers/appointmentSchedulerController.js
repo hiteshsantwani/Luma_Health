@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 const util = require('util');
+var moment = require('moment');
 
 require('../Models/AppointmentDetailsModel');
 require('../Models/AvailabiltyScheduleModel');
@@ -112,9 +113,14 @@ export const getWorkingHoursDoctor = (req, res) => {
 export const bookDoctorOpening = (req, res) => {
     console.log(`Email searching: ${req.body.Email}`);
   
-    Doctor_Detail.find({Doctor_email : req.body.Email}).exec(function (err, data) {
+    Doctor_Detail.find({Doctor_email : req.body.Email}).lean().exec(function (err, data) {
         if (err) return console.log(err);
+        // check if the opening is valid
+        console.log(`jsonifies: ${JSON.parse(JSON.stringify(data))}`);
+        console.log(`json value: ${data}`)
+
         data.forEach(element => {
+            if(element == _id) var _id = element;
             if(element.Availabilty != undefined){
                 var arr = element.Availabilty;
                 for(var i = 0; i < arr.length; i++){
@@ -124,6 +130,43 @@ export const bookDoctorOpening = (req, res) => {
                     var Available = jsonval.Available;
                     console.log(`Day: ${day}`)
                     console.log(`Avail: ${Available}`)
+                    var day = moment(day);
+                    var requestDay = moment(req.body.Date);
+                    var duration = moment.duration(day.diff(requestDay));
+                    console.log(`duration: ${duration}`)
+                    // check if the opening is valid
+                    if(duration == 0 && Available == "YES"){
+
+                        // NOW close the opening
+
+                        Doctor_Detail.findOneAndUpdate({
+                            "Doctor_email" : req.body.Email,
+                            "Availabilty._id" : jsonval._id
+                        },
+                        {
+                            $set:{"Availabilty.$.Available" : "NO"}
+                            
+                        },
+                        {
+                            select: { 
+                                Availabilty: {
+                                   $elemMatch: 
+                                   {   Available : "NO" } 
+                                }
+                            }
+                        },
+                        function(err,result){
+                            if (!err) {
+                                console.log(result);
+                            }
+                        })
+                        // Book the appointment
+                        // let newAppointment = new Appointment_Detail(req.body)
+                        // Appointment_Detail.insertOne(newAppointment, function(err, res) {
+                        //     if (err) throw err;
+                        //     console.log("1 document inserted");
+                        //   })
+                    }
                 }
             }
           });
