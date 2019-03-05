@@ -3,31 +3,39 @@ const express = require('express');
 const router = express.Router();
 
 
-router.get('/getDoctorByEmail/:Email', function (req, res, next) {
-    // middleware
-    console.log(`Request from: ${req.originalUrl}`);
-    console.log(`Request type: ${req.method}`);
-    next();
-  },controller.getDoctorByEmail);
+// router.get('/getDoctorByEmail/:Email', function (req, res, next) {
+//     // middleware
+//     console.log(`Request from: ${req.originalUrl}`);
+//     console.log(`Request type: ${req.method}`);
+//     next();
+//   },controller.getDoctorByEmail);
 
 
-router.get('/getWorkingHoursDoctor/:Email', function (req, res, next) {
-    // middleware
-    console.log(`Request from: ${req.originalUrl}`);
-    console.log(`Request type: ${req.method}`);
-    next();
-  },controller.getWorkingHoursDoctor);
+// router.get('/getWorkingHoursDoctor/:Email', function (req, res, next) {
+//     // middleware
+//     console.log(`Request from: ${req.originalUrl}`);
+//     console.log(`Request type: ${req.method}`);
+//     next();
+//   },controller.getWorkingHoursDoctor);
 
 // const routes = (app) => {
 
-// // CREATE
-//     app.route('/AddDoctor')
-//     .post((req, res, next) => {
-//         // middleware
-//         console.log(`Request from: ${req.originalUrl}`)
-//         console.log(`Request type: ${req.method}`)
-//         next();
-//     }, controller.addNewDoctor)
+// CREATE
+    router.post('/AddDoctor', function (req, res, next){
+        // middleware
+        console.log(`Request from: ${req.originalUrl}`)
+        console.log(`Request type: ${req.method}`)
+        next();
+    }, controller.addNewDoctor)
+
+// API
+
+    router.get('/getWorkingHoursDoctor/:Email', function(req, res, next){
+        // middleware
+        console.log(`Request from: ${req.originalUrl}`)
+        console.log(`Request type: ${req.method}`)
+        next();
+    }, controller.getWorkingHoursDoctor);
     
 //     app.route('/AddPatient')
 //     .post((req, res, next) => {
