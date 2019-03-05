@@ -31,16 +31,28 @@ describe('AppointmentScheduler', () => {
  /*
   * Test the /GET route
   */
-  describe('/GET book', () => {
-	  it('it should GET all the books', (done) => {
-			chai.request(server)
-		    .get('/book')
-		    .end((err, res) => {
-			  	res.should.have.status(200);
-			  	res.body.should.be.a('array');
-			  	res.body.length.should.be.eql(0);
-		      done();
-		    });
+  describe('/GET/:Email getWorkingHoursDoctor', () => {
+	  it('it should GET the Working hours of Doctor with Availability Information', (done) => {
+
+        let Doctor = new DoctorDetailsSchema({
+            // Create the new object and save it in DB
+            Doctor_email: "hiteshka@buffalo.edu",
+            Speciality: "ENT",
+            Availabilty: [{"Day" : "1/1/1 0:0:0", "Available" : "YES"}, 
+            {"Day" : "2/1/2 0:0:0", "Available" : "NO"}] });
+
+            Doctor.save((err, doctor) => {
+            chai.request(server)
+            .get('/getWorkingHoursDoctor/' + doctor.Doctor_email)
+            .send(doctor.Availabilty)
+            .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('title');
+                    res.body.should.have.property('_id').eql(book.id);
+                done();
+              });
+            });
 	  });
   });
  /*

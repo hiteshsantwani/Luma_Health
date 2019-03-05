@@ -15,14 +15,6 @@ const Appointment_Detail = mongoose.model('Appointment_Detail');
 export const addNewDoctor = (req, res) => {
     console.log(`Request data: ${req.body}`)
 
-    // let newDoctor = new Doctor_Detail({
-    //     Doctor_email : req.body.Doctor_email,
-    //     F_name : req.body.F_name,
-    //     L_name : req.body.L_name,
-    //     Speciality : req.body.Speciality,
-    // },
-    // { $push: { Availabilty: req.body.Availabilty } }
-    // );
     let newDoctor = new Doctor_Detail(req.body)
 
     newDoctor.save((err, newDoctor) => {

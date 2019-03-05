@@ -4,6 +4,8 @@ var http = require('http'),
     express = require('express'),
     mongoose = require('mongoose'),
     cors = require('cors');
+    let morgan = require('morgan');
+
     
 import routes from "./src/Routes/appointmentSchedulerRoutes";
 
