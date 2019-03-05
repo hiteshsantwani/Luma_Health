@@ -42,9 +42,9 @@ app.use(bodyParser.json());
 //routes(app);
 let routes = require('./src/Routes/appointmentSchedulerRoutes');
 
-app.get('/getWorkingHoursDoctor/:Email', routes);
-app.get('/getDoctorByEmail/:Email', routes);
 app.post('/AddDoctor/', routes);
+app.get('/getWorkingHoursDoctor/:Email', routes);
+app.post('/bookWorkingHoursDoctor/', routes);
 
 //to do: When deploying this application need to undersatnd how to get the open port dynamicallt
 app.listen(port, () =>

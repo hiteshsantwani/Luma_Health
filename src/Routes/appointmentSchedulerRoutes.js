@@ -36,6 +36,14 @@ const router = express.Router();
         console.log(`Request type: ${req.method}`)
         next();
     }, controller.getWorkingHoursDoctor);
+
+    
+    router.post('/bookWorkingHoursDoctor', function(req, res, next) {
+        // middleware
+        console.log(`Request from: ${req.originalUrl}`)
+        console.log(`Request type: ${req.method}`)
+        next();
+    }, controller.bookDoctorOpening);    
     
 //     app.route('/AddPatient')
 //     .post((req, res, next) => {
