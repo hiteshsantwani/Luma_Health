@@ -6,22 +6,18 @@ var http = require('http'),
     cors = require('cors');
     let morgan = require('morgan');
 
-    
-import routes from "./src/Routes/appointmentSchedulerRoutes";
-
 const app = express();
 app.use(cors());
-
 const port = 3000;
 
 // ======================================= Basic Error Handling =================
 
 /// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
+// app.use(function(req, res, next) {
+//   var err = new Error('Not Found');
+//   err.status = 404;
+//   next(err);
+// });
 // ==============================================================================
 
 // to do: Move configuration to external file
@@ -43,15 +39,16 @@ mongoose.connect(`mongodb://${server}/${database}`)
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
-routes(app);
+//routes(app);
+let routes = require('./src/Routes/appointmentSchedulerRoutes');
 
-app.get('/', (req, res) =>
+app.get('/getWorkingHoursDoctor/:Email', routes);
+app.get('/getDoctorByEmail/:Email', routes);
 
-res.send(`Node and Express Server is running on port ${port}`)
-
-);
 
 //to do: When deploying this application need to undersatnd how to get the open port dynamicallt
 app.listen(port, () =>
 console.log(`your server is running on port ${port}`)
 );
+
+module.exports = app // For Testing

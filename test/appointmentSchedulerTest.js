@@ -1,11 +1,15 @@
 
 //During the test the env variable is set to test
-process.env.NODE_ENV = 'test';
+//process.env.NODE_ENV = 'test';
 let mongoose = require("mongoose");
+let AppointmentDetail = require('../src/Models/AppointmentDetailsModel');
+let DoctorDetail = require('../src/Models/DoctorDetailsModel');
+let PatientDetail = require('../src/Models/PatientDetailsModel');
 
-let AppointmentDetail = require('../Models/AppointmentDetailsModel');
-let DoctorDetail = require('../Models/DoctorDetailsModel');
-let PatientDetail = require('../Models/PatientDetailsModel');
+
+const Doctor_Detail_model = mongoose.model('Doctor_Detail');
+const Patient_Detail_model = mongoose.model('Patient_Detail');
+const Appointment_Detail_model = mongoose.model('Appointment_Detail');
 
 //Require the dev-dependencies
 let chai = require('chai');
@@ -18,15 +22,13 @@ chai.use(chaiHttp);
 //Our parent block
 describe('AppointmentScheduler', () => {
 	beforeEach((done) => { //Before each test we empty the database
-		AppointmentDetail.remove({}, (err) => { 
-		   done();		   
+		Appointment_Detail_model.remove({}, (err) => { 	   
         });
-        DoctorDetail.remove({}, (err) => { 
-            done();		   
+        Doctor_Detail_model.remove({}, (err) => { 	   
          });
-         PatientDetail.remove({}, (err) => { 
-            done();		   
-         });	
+         Patient_Detail_model.remove({}, (err) => { 	   
+         });
+         done();	
 	});
  /*
   * Test the /GET route
@@ -34,7 +36,7 @@ describe('AppointmentScheduler', () => {
   describe('/GET/:Email getWorkingHoursDoctor', () => {
 	  it('it should GET the Working hours of Doctor with Availability Information', (done) => {
 
-        let Doctor = new DoctorDetailsSchema({
+        let Doctor = new Doctor_Detail_model({
             // Create the new object and save it in DB
             Doctor_email: "hiteshka@buffalo.edu",
             Speciality: "ENT",
@@ -43,124 +45,16 @@ describe('AppointmentScheduler', () => {
 
             Doctor.save((err, doctor) => {
             chai.request(server)
-            .get('/getWorkingHoursDoctor/' + doctor.Doctor_email)
+            .get('getWorkingHoursDoctor/' + doctor.Doctor_email)
             .send(doctor.Availabilty)
             .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.be.a('object');
-                    res.body.should.have.property('title');
-                    res.body.should.have.property('_id').eql(book.id);
+                    res.body.should.have.property('Day');
+                    res.body.should.have.property('Available');
                 done();
               });
             });
-	  });
-  });
- /*
-  * Test the /POST route
-  */
-  describe('/POST book', () => {
-	  it('it should not POST a book without pages field', (done) => {
-	  	let book = {
-	  		title: "The Lord of the Rings",
-	  		author: "J.R.R. Tolkien",
-	  		year: 1954
-	  	}
-			chai.request(server)
-		    .post('/book')
-		    .send(book)
-		    .end((err, res) => {
-			  	res.should.have.status(200);
-			  	res.body.should.be.a('object');
-			  	res.body.should.have.property('errors');
-			  	res.body.errors.should.have.property('pages');
-			  	res.body.errors.pages.should.have.property('kind').eql('required');
-		      done();
-		    });
-	  });
-	  it('it should POST a book ', (done) => {
-	  	let book = {
-	  		title: "The Lord of the Rings",
-	  		author: "J.R.R. Tolkien",
-	  		year: 1954,
-	  		pages: 1170
-	  	}
-			chai.request(server)
-		    .post('/book')
-		    .send(book)
-		    .end((err, res) => {
-			  	res.should.have.status(200);
-			  	res.body.should.be.a('object');
-			  	res.body.should.have.property('message').eql('Book successfully added!');
-			  	res.body.book.should.have.property('title');
-			  	res.body.book.should.have.property('author');
-			  	res.body.book.should.have.property('pages');
-			  	res.body.book.should.have.property('year');
-		      done();
-		    });
-	  });
-  });
- /*
-  * Test the /GET/:id route
-  */
-  describe('/GET/:id book', () => {
-	  it('it should GET a book by the given id', (done) => {
-	  	let book = new Book({ title: "The Lord of the Rings", author: "J.R.R. Tolkien", year: 1954, pages: 1170 });
-	  	book.save((err, book) => {
-	  		chai.request(server)
-		    .get('/book/' + book.id)
-		    .send(book)
-		    .end((err, res) => {
-			  	res.should.have.status(200);
-			  	res.body.should.be.a('object');
-			  	res.body.should.have.property('title');
-			  	res.body.should.have.property('author');
-			  	res.body.should.have.property('pages');
-			  	res.body.should.have.property('year');
-			  	res.body.should.have.property('_id').eql(book.id);
-		      done();
-		    });
-	  	});
-			
-	  });
-  });
- /*
-  * Test the /PUT/:id route
-  */
-  describe('/PUT/:id book', () => {
-	  it('it should UPDATE a book given the id', (done) => {
-	  	let book = new Book({title: "The Chronicles of Narnia", author: "C.S. Lewis", year: 1948, pages: 778})
-	  	book.save((err, book) => {
-				chai.request(server)
-			    .put('/book/' + book.id)
-			    .send({title: "The Chronicles of Narnia", author: "C.S. Lewis", year: 1950, pages: 778})
-			    .end((err, res) => {
-				  	res.should.have.status(200);
-				  	res.body.should.be.a('object');
-				  	res.body.should.have.property('message').eql('Book updated!');
-				  	res.body.book.should.have.property('year').eql(1950);
-			      done();
-			    });
-		  });
-	  });
-  });
- /*
-  * Test the /DELETE/:id route
-  */
-  describe('/DELETE/:id book', () => {
-	  it('it should DELETE a book given the id', (done) => {
-	  	let book = new Book({title: "The Chronicles of Narnia", author: "C.S. Lewis", year: 1948, pages: 778})
-	  	book.save((err, book) => {
-				chai.request(server)
-			    .delete('/book/' + book.id)
-			    .end((err, res) => {
-				  	res.should.have.status(200);
-				  	res.body.should.be.a('object');
-				  	res.body.should.have.property('message').eql('Book successfully deleted!');
-				  	res.body.result.should.have.property('ok').eql(1);
-				  	res.body.result.should.have.property('n').eql(1);
-			      done();
-			    });
-		  });
 	  });
   });
 });

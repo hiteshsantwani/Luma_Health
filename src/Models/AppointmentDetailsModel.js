@@ -28,4 +28,3 @@ AppointmentDetailsSchema.methods.toJSONFor = function(){
   };
 
 mongoose.model('Appointment_Detail', AppointmentDetailsSchema);
-

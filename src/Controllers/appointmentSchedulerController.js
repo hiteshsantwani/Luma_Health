@@ -6,7 +6,6 @@ require('../Models/AppointmentDetailsModel');
 require('../Models/DoctorDetailsModel');
 require('../Models/PatientDetailsModel');
 
-
 const Doctor_Detail = mongoose.model('Doctor_Detail');
 const Patient_Detail = mongoose.model('Patient_Detail');
 const Appointment_Detail = mongoose.model('Appointment_Detail');
@@ -81,7 +80,6 @@ export const getWorkingHoursDoctor = (req, res) => {
   
     Doctor_Detail.find({Doctor_email : req.params.Email}, 'Availabilty', function (err, data) {
         if (err) return console.log(err);
-        
         return res.json(data)
     });
 };
