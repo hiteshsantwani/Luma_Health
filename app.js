@@ -1,3 +1,4 @@
+// Require Modules
 var http = require('http'),
     path = require('path'),
     bodyParser = require('body-parser'),
@@ -6,22 +7,61 @@ var http = require('http'),
     cors = require('cors');
     let morgan = require('morgan');
 
+
+/*
+ *
+ * Initialization 
+ *
+ */ 
 const app = express();
 app.use(cors());
-const port = 3000;
 
-// ======================================= Basic Error Handling =================
 
-/// catch 404 and forward to error handler
-// app.use(function(req, res, next) {
-//   var err = new Error('Not Found');
-//   err.status = 404;
-//   next(err);
-// });
-// ==============================================================================
+/*
+ *
+ * MiddelWare 
+ *
+ */
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
 
-// to do: Move configuration to external file
-// mongoose connection
+/*
+ * Routes
+ */
+let routes = require('./src/Routes/appointmentSchedulerRoutes');
+app.post('/AddDoctor/', routes);
+app.get('/getWorkingHoursDoctor/:Email', routes);
+app.post('/createAndUpdateWorkingHoursDoctor/', routes);
+app.post('/bookWorkingHoursDoctor/', routes);
+
+/*
+ * UnHandeled Routes
+ */
+app.use((req, res) => {
+  res.statusCode = 404;
+  res.send({
+      errcode: '99',
+      errmessage: 'Are you lost?',
+      result: null
+  });
+});
+
+/*
+ * Broken Things
+ */
+app.use((err, req, res) => {
+  console.error(err.stack);
+  res.statusCode = 500;
+  res.send({
+      errcode: '99',
+      errmessage: 'Something broke!',
+      result: null
+  });
+});
+
+
+
+
 
 const server = '127.0.0.1:27017'; // REPLACE WITH YOUR DB SERVER
 const database = 'AppointmentScheduler';      // REPLACE WITH YOUR DB NAME
@@ -35,21 +75,12 @@ mongoose.connect(`mongodb://${server}/${database}`)
          console.error('Database connection error')
        });
 
-// bodyparser setup
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(bodyParser.json());
+/*
+ * Server Listing
+ */
+app.listen(process.env.PORT || 3000, () => {
+  console.log('app is started at ', process.env.PORT || 3000);
+});
 
-//routes(app);
-let routes = require('./src/Routes/appointmentSchedulerRoutes');
-
-app.post('/AddDoctor/', routes);
-app.get('/getWorkingHoursDoctor/:Email', routes);
-app.post('/createAndUpdateWorkingHoursDoctor/', routes);
-app.post('/bookWorkingHoursDoctor/', routes);
-
-//to do: When deploying this application need to undersatnd how to get the open port dynamicallt
-app.listen(port, () =>
-console.log(`your server is running on port ${port}`)
-);
 
 module.exports = app // For Testing
