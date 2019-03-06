@@ -42,8 +42,8 @@ describe('AppointmentScheduler', () => {
             Speciality: "ENT",
             Availabilty: [{"Day" : "1/1/1 0:0:0", "Available" : "YES"}, 
             {"Day" : "2/1/2 0:0:0", "Available" : "NO"}] });
-
             Doctor.save((err, doctor) => {
+              
         chai.request(server)
         .get('getWorkingHoursDoctor/' + doctor.Doctor_email)
         .send(doctor.Availabilty)
@@ -85,4 +85,33 @@ describe('AppointmentScheduler', () => {
       });
   });
 });
+
+/*
+  * Test the /POST route
+  */
+ describe('/POST bookWorkingHoursDoctor', () => {
+  it('it should check if the doctor is available and if yes then it close' +
+   'that slot and create the new appointment in appointment collection', (done) => {
+
+        let Doctor = new Doctor_Detail_model({
+            // Create the new object and save it in DB
+            Doctor_email: "hiteshka@buffalo.edu",
+            Speciality: "ENT",
+            Availabilty: [{"Day" : "1/1/1 0:0:0", "Available" : "YES"}, 
+            {"Day" : "2/1/2 0:0:0", "Available" : "NO"}] });
+
+    chai.request(server)
+      .post('/AddDoctor')
+      .send(Doctor)
+      .end((err, res) => {
+        should.exist(res.body);
+        res.should.have.status(200);
+        res.body.should.be.a('object');
+        res.body.should.have.property('Doctor_email');
+        res.body.should.have.property('Speciality');
+        done();
+      });
+  });
+});
+
 });

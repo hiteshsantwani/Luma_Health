@@ -44,23 +44,7 @@ class AppointmentSchedulerService {
         }
     }
 
-        // get the working hours of the doctor 
-    async getWorkingHoursDoctor(req, res) {
-        try{
-            Doctor_Detail.find({Doctor_email : req.params.Email},
-                 'Availabilty', function (err, data) {
-            if (err){
-                res.json(err)
-            } else{
-                res.json(data)
-            } 
-        });
-        } catch (err) {
-            return err;
-        }
-    }
-
-    // get the working hours of the doctor 
+    // Book the doctor opening 
     async bookDoctorOpening(req, res) {
         try{
             console.log(`Doctor_email booking : ${req.body.Doctor_email}`)
@@ -128,6 +112,85 @@ class AppointmentSchedulerService {
                 return err;
         }
     }
+
+// Create and Update the working hours of doctor. 
+async createAndUpdateWorkingHoursDoctor(req, res) {
+    console.log(`Request:  ${req.body.Doctor_email} and ${req.body.NO}`);
+    // for each YES schedule
+    await req.body.YES.forEach(element => {
+        console.log(`Element: ${element}`)
+        Doctor_Detail.updateOne({
+            
+            "Doctor_email" : req.body.Doctor_email,
+            "Availabilty.Day" : element,
+        },
+        {
+            $set:{"Availabilty.$.Available" : "YES"}
+            
+        },
+        { "upsert": true },
+        async function(err,result){
+            console.log(`Inside Yes Element`)
+            console.log(`result: ${result}`)
+            if(err != null){
+                console.log(`Error: ${err}`)
+                console.log(`Element: ${element}`)
+                console.log(`Now creating new element inside the Document`)
+                Doctor_Detail.updateOne({
+                    "Doctor_email" : req.body.Doctor_email,
+                },
+                {
+                    $push:{Availabilty:{
+                        "Day": element,
+                        "Available": "YES"
+                }}
+                }
+                // ,
+                // {"upsert": true},
+                // function(err, result){ console.log(`Error while creating new element ${err}`)}
+                
+                )
+            }
+            //res.json(result)
+        })
+    })
+    
+    await req.body.NO.forEach(element => {
+        console.log(`Element: ${element}`);
+        Doctor_Detail.updateOne({
+            "Doctor_email" : req.body.Doctor_email,
+            "Availabilty.Day" : element
+        },
+        {
+            $set:{"Availabilty.$.Available" : "NO"}
+            
+        },
+        { "upsert": true },
+        async function(err,result){
+            console.log(`Inside No element`)
+            console.log(`result: ${result}`)
+            console.log(`Error: ${err}`)
+            if(err != null){
+                Doctor_Detail.updateOne({
+                    "Doctor_email" : req.body.Doctor_email,
+                },
+                {
+                    $push:{Availabilty:{
+                        "Day": element,
+                        "Available": "NO"
+                    }}
+                    
+                })
+            }
+            if (err) {
+                console.log(err);
+                //res.json(err);
+            }
+            //res.json(result)
+        }) 
+    })
+}
+
 }
 
 module.exports = new AppointmentSchedulerService();

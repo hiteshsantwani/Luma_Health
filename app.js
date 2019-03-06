@@ -36,7 +36,7 @@ mongoose.connect(`mongodb://${server}/${database}`)
        });
 
 // bodyparser setup
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 //routes(app);
@@ -44,6 +44,7 @@ let routes = require('./src/Routes/appointmentSchedulerRoutes');
 
 app.post('/AddDoctor/', routes);
 app.get('/getWorkingHoursDoctor/:Email', routes);
+app.post('/createAndUpdateWorkingHoursDoctor/', routes);
 app.post('/bookWorkingHoursDoctor/', routes);
 
 //to do: When deploying this application need to undersatnd how to get the open port dynamicallt
