@@ -115,9 +115,12 @@ class AppointmentSchedulerService {
 
 // Create and Update the working hours of doctor. 
 async createAndUpdateWorkingHoursDoctor(req, res) {
+    console.log(`Request:  ${req.body.Doctor_email} and ${req.body.YES}`);
+
     console.log(`Request:  ${req.body.Doctor_email} and ${req.body.NO}`);
-    // for each YES schedule
-    await req.body.YES.forEach(element => {
+
+    //using for each
+    req.body.YES.forEach(element => {
         console.log(`Element: ${element}`)
         Doctor_Detail.updateOne({
             
@@ -128,8 +131,9 @@ async createAndUpdateWorkingHoursDoctor(req, res) {
             $set:{"Availabilty.$.Available" : "YES"}
             
         },
-        { "upsert": true },
-        async function(err,result){
+        { "upsert": true }
+        ,
+        function(err,result){
             console.log(`Inside Yes Element`)
             console.log(`result: ${result}`)
             if(err != null){
@@ -140,23 +144,24 @@ async createAndUpdateWorkingHoursDoctor(req, res) {
                     "Doctor_email" : req.body.Doctor_email,
                 },
                 {
-                    $push:{Availabilty:{
+                    $push:{
+                        Availabilty:{
                         "Day": element,
                         "Available": "YES"
                 }}
-                }
+                },
                 // ,
                 // {"upsert": true},
-                // function(err, result){ console.log(`Error while creating new element ${err}`)}
+                function(err, result){ console.log(`Error while creating new element ${err} and ${result}`)}
                 
                 )
             }
             //res.json(result)
-        })
+        }
+        )
     })
     
-    await req.body.NO.forEach(element => {
-        console.log(`Element: ${element}`);
+    req.body.NO.forEach(element => {
         Doctor_Detail.updateOne({
             "Doctor_email" : req.body.Doctor_email,
             "Availabilty.Day" : element
@@ -165,21 +170,26 @@ async createAndUpdateWorkingHoursDoctor(req, res) {
             $set:{"Availabilty.$.Available" : "NO"}
             
         },
-        { "upsert": true },
-        async function(err,result){
+        { "upsert": true }
+        ,
+        function(err,result){
             console.log(`Inside No element`)
             console.log(`result: ${result}`)
             console.log(`Error: ${err}`)
             if(err != null){
+                console.log(`Error: ${err}`)
+                console.log(`Element: ${element}`)
+                console.log(`Now creating new element inside the Document`)
                 Doctor_Detail.updateOne({
                     "Doctor_email" : req.body.Doctor_email,
                 },
                 {
-                    $push:{Availabilty:{
+                    $push:{
+                        "Availabilty":{
                         "Day": element,
                         "Available": "NO"
-                    }}
-                    
+                    }},
+                    function(err, result){ console.log(`Error while creating new element ${err} and ${result}`)}
                 })
             }
             if (err) {
@@ -187,7 +197,8 @@ async createAndUpdateWorkingHoursDoctor(req, res) {
                 //res.json(err);
             }
             //res.json(result)
-        }) 
+        }
+        ) 
     })
 }
 
