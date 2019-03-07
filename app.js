@@ -31,7 +31,7 @@ app.use(bodyParser.json());
 let routes = require('./src/Routes/appointmentSchedulerRoutes');
 app.post('/AddDoctor/', routes);
 app.get('/getWorkingHoursDoctor/:Email', routes);
-app.post('/createAndUpdateWorkingHoursDoctor/', routes);
+app.post('/createWorkingHoursDoctor/', routes);
 app.post('/bookWorkingHoursDoctor/', routes);
 
 /*
@@ -58,9 +58,6 @@ app.use((err, req, res) => {
       result: null
   });
 });
-
-
-
 
 
 const server = '127.0.0.1:27017'; // REPLACE WITH YOUR DB SERVER

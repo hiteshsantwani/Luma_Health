@@ -116,98 +116,72 @@ class AppointmentSchedulerService {
     }
 
 // Create and Update the working hours of doctor. 
-async createAndUpdateWorkingHoursDoctor(req, res) {
-    console.log(`Request:  ${req.body.Doctor_email} and ${req.body.YES}`);
+async createWorkingHoursDoctor(req, res) {
+    await console.log(`Request:  ${req.body.Doctor_email} and ${req.body.YES}`);
 
-    console.log(`Request:  ${req.body.Doctor_email} and ${req.body.NO}`);
+    await console.log(`Request:  ${req.body.Doctor_email} and ${req.body.NO}`);
 
     //using for each
-    await this.processYes(req);
-    
-    await this.processNo(req);
+    var available = "YES";
+    await this.process(req, available).catch(e => {
+        console.log(`${e}`)
+    });
+    available = "NO";
+    await this.process(req, available).catch(e => {
+        console.log(`${e}`)
+    });    
+    //res.json("Data Updated");
 }
 
-
-    async processNo(req) {
-        await req.body.NO.forEach(element => {
-            console.log(`NO Element: ${element}`);
-            this.processEachNo(req, element);
+    async process(req, available) {
+        if(available == "YES"){
+            var arr = req.body.YES;
+        } else{
+            arr = req.body.NO;
+        }
+        await arr.forEach( async (element) => {
+            await console.log(`${available} Element: ${element}`);
+            await this.processEach(req, element, available).catch(e => {
+                console.log(`${e}`)
+            });
         });
     }
 
-    async processEachNo(req, element) {
-        await Doctor_Detail.updateOne({
+    async processEach(req, element, available) {
+        await Doctor_Detail.findOneAndUpdate({
             "Doctor_email": req.body.Doctor_email,
             "Availabilty": {
-                "Day": element
+                "$elemMatch":{
+                    "Day" : new Date(element),
+                    $or : [{ "Available": "YES" }, { "Available": "NO" }]
+                    }
                 }
         }, {
-                $set: { "Availabilty.$.Available": "NO" }
+                $set: { "Availabilty.$.Available": available }
             }, { "upsert": true }, async function (err, result) {
-                console.log(`Inside No element`);
-                console.log(`result: ${result}`);
+                console.log(`Inside ${available} element`);
                 if (err != null) {
                     console.log(`Error: ${err}`);
                     console.log(`Element: ${element}`);
                     console.log(`Now creating new element inside the Document`);
-                    await Doctor_Detail.updateOne({
+                    await Doctor_Detail.findOneAndUpdate({
                         "Doctor_email": req.body.Doctor_email,
                     }, {
                             $push: {
                                 Availabilty: {
                                     "Day": element,
-                                    "Available": "NO"
+                                    "Available": available
                                 }
                             }
                         },
                         {
                             async function(err, result) { await 
-                                console.log(`Error while creating new element NO ${err} and ${result}`); }
+                                console.log(`Error while creating new element ${available} ${err} and ${result}`); }
+                        }).catch(e => {
+                            console.log(`${e}`)
                         });
                 }
-            });
-    }
-
-
-
-    async processYes(req) {
-        await req.body.YES.forEach(element => {
-            console.log(`Yes Element: ${element}`);
-            this.processEachYes(req, element);
-        });
-    }
-
-    async processEachYes(req, element) {
-        await Doctor_Detail.updateOne({
-            "Doctor_email": req.body.Doctor_email,
-            "Availabilty": {
-                "Day": element
-                }
-        }, {
-                $set: { "Availabilty.$.Available": "YES" }
-            }, { "upsert": true }, async function (err, result) {
-                console.log(`Inside YES element`);
-                console.log(`result: ${result}`);
-                if (err != null) {
-                    console.log(`Error: ${err}`);
-                    console.log(`Element: ${element}`);
-                    console.log(`Now creating new element inside the Document`);
-                    await Doctor_Detail.updateOne({
-                        "Doctor_email": req.body.Doctor_email,
-                    }, {
-                            $push: {
-                                Availabilty: {
-                                    "Day": element,
-                                    "Available": "YES"
-                                }
-                            }
-                        },
-                        {
-                            async function(err, result) { await 
-                                console.log(`Error while creating new element YES ${err} and ${result}`); }
-                        });
-                }
-            });
+            }).exec();
     }
 }
 
