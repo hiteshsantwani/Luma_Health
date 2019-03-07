@@ -45,12 +45,12 @@ describe('AppointmentScheduler', () => {
             Doctor.save((err, doctor) => {
               
         chai.request(server)
-        .get('getWorkingHoursDoctor/' + doctor.Doctor_email)
-        .send(doctor.Availabilty)
+        .get('/getWorkingHoursDoctor/' + Doctor.Doctor_email)
+        .send(Doctor.Availabilty)
         .end((err, res) => {
-            should.exist(res);
+            should.exist(res.body);
             res.should.have.status(200);
-            res.body.should.be.a('object');
+            res.body.should.be.a('Array');
             // res.body.should.have.property('Day');
             // res.body.should.have.property('Available');
             done();

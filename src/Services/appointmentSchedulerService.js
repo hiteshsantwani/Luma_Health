@@ -103,6 +103,8 @@ class AppointmentSchedulerService {
                                      }
                                         res.json(newAppointment);
                                 })
+                            } else{
+                                res.json("No Match Found")
                             }
                         }
                     }
@@ -144,8 +146,8 @@ async createAndUpdateWorkingHoursDoctor(req, res) {
             }, { "upsert": true }, async function (err, result) {
                 console.log(`Inside No element`);
                 console.log(`result: ${result}`);
-                console.log(`Error: ${err}`);
                 if (err != null) {
+                    console.log(`Error: ${err}`);
                     console.log(`Element: ${element}`);
                     console.log(`Now creating new element inside the Document`);
                     await Doctor_Detail.updateOne({
@@ -158,7 +160,6 @@ async createAndUpdateWorkingHoursDoctor(req, res) {
                                 }
                             }
                         },
-                        // { "upsert": true },
                         {
                             async function(err, result) { await 
                                 console.log(`Error while creating new element NO ${err} and ${result}`); }
@@ -167,9 +168,11 @@ async createAndUpdateWorkingHoursDoctor(req, res) {
             });
     }
 
+
+
     async processYes(req) {
         await req.body.YES.forEach(element => {
-            console.log(`YES Element: ${element}`);
+            console.log(`Yes Element: ${element}`);
             this.processEachYes(req, element);
         });
     }
@@ -183,7 +186,7 @@ async createAndUpdateWorkingHoursDoctor(req, res) {
         }, {
                 $set: { "Availabilty.$.Available": "YES" }
             }, { "upsert": true }, async function (err, result) {
-                console.log(`Inside Yes Element`);
+                console.log(`Inside YES element`);
                 console.log(`result: ${result}`);
                 if (err != null) {
                     console.log(`Error: ${err}`);
@@ -199,8 +202,10 @@ async createAndUpdateWorkingHoursDoctor(req, res) {
                                 }
                             }
                         },
-                        // {"upsert": true},
-                        async function (err, result) { await console.log(`Error while creating new element YES ${err} and ${result}`); });
+                        {
+                            async function(err, result) { await 
+                                console.log(`Error while creating new element YES ${err} and ${result}`); }
+                        });
                 }
             });
     }
