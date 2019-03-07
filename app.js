@@ -31,7 +31,7 @@ app.use(bodyParser.json());
 let routes = require('./src/Routes/appointmentSchedulerRoutes');
 app.post('/AddDoctor/', routes);
 app.get('/getWorkingHoursDoctor/:Email', routes);
-app.post('/createWorkingHoursDoctor/', routes);
+app.post('/createUpdateWorkingHoursDoctor/', routes);
 app.post('/bookWorkingHoursDoctor/', routes);
 
 /*

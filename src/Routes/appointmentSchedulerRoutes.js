@@ -29,11 +29,11 @@ const router = express.Router();
     }, controller.bookDoctorOpening);  
     
     
-    router.post('/createWorkingHoursDoctor', function(req, res, next) {
+    router.post('/createUpdateWorkingHoursDoctor', function(req, res, next) {
         // middleware
         console.log(`Request from: ${req.originalUrl}`)
         console.log(`Request type: ${req.method}`)
         next();
-    }, controller.createWorkingHoursDoctor);
+    }, controller.createUpdateWorkingHoursDoctor);
 
 module.exports = router;

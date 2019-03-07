@@ -44,94 +44,61 @@ class AppointmentSchedulerService {
         }
     }
 
-    // Book the doctor opening 
-    async bookDoctorOpening(req, res) {
-        try{
-            console.log(`Doctor_email booking : ${req.body.Doctor_email}`)
-            Doctor_Detail.find({Doctor_email : req.body.Doctor_email}).exec(function (err, data) {
-                if (err) return console.log(err);
-                // check if the opening is valid
-                console.log(`jsonifies: ${JSON.parse(JSON.stringify(data))}`);
-                console.log(`json value: ${data}`)
-        
-                data.forEach(element => {
-                    if(element == _id) var _id = element;
-                    if(element.Availabilty != undefined){
-                        var arr = element.Availabilty;
-                        for(var i = 0; i < arr.length; i++){
-                            var str = JSON.stringify(arr[i]);
-                            var jsonval = JSON.parse(str);
-                            var day = jsonval.Day;
-                            var Available = jsonval.Available;
-                            console.log(`Day: ${day}`)
-                            console.log(`Avail: ${Available}`)
-                            var day = moment(day);
-                            var requestDay = moment(req.body.A_Date);
-                            var duration = moment.duration(day.diff(requestDay));
-                            console.log(`duration: ${duration}`)
-                            // check if the opening is valid
-                            if(duration == 0 && Available == "YES"){
-        
-                                // NOW close the opening
-        
-                                Doctor_Detail.findOneAndUpdate({
-                                    "Doctor_email" : req.body.Doctor_email,
-                                    "Availabilty._id" : jsonval._id
-                                },
-                                {
-                                    $set:{"Availabilty.$.Available" : "NO"}
-                                    
-                                },
-                                {
-                                select: { 
-                                    Availabilty: {
-                                        $elemMatch: 
-                                        {   Available : "NO" } 
-                                    }
-                                }
-                                },
-                                function(err,result){
-                                    if (!err) {
-                                        console.log(result);
-                                    }
-                                })
-                                // Book the appointment
-                                let newAppointment = new Appointment_Detail(req.body)
-                                newAppointment.save((err, newAppointment) => {
-                                    if (err) {
-                                        res.send(err);
-                                     }
-                                        res.json(newAppointment);
-                                })
-                            } else{
-                                res.json("No Match Found")
-                            }
-                        }
+    async bookDoctorOpening(req, res){
+    console.log(`${req.body}`)
+        Doctor_Detail.findOneAndUpdate({
+            "Doctor_email": req.body.Doctor_email,
+            "Availabilty": {
+                "$elemMatch":{
+                    "Day" : new Date(req.body.A_Date),
+                    "Available": "YES"
                     }
-                  });
-                });
-            } catch (err) {
-                return err;
+                }
+        }, {
+                $set: { "Availabilty.$.Available": "NO" }
+            }, function(err, result){
+                let newAppointment = new Appointment_Detail(req.body)
+                newAppointment.save((err, newAppointment) => {
+                    if (err) {
+                        console.log(`Error : ${err}`)
+                     }
+                        console.log(`Object: ${result}`)
+                })
+            }).catch(e => {
+                console.log(`${e}`)
+            });
         }
+
+    async dropAppointments(req, res) {
+        
+            await console.log(`Dropping following from appointment collection if they exist:  ${req.body.Doctor_email} and ${req.body.NO}`);
+            req.body.NO.forEach(async (element) => {
+                await Appointment_Detail.remove({
+                    "Doctor_email": req.body.Doctor_email,
+                    "A_Date": new Date(element)
+                }).catch(e => {
+                    console.log(`${e}`);
+                })
+            })
+        }
+
+    // Create and Update the working hours of doctor. 
+    async createUpdateWorkingHoursDoctor(req, res) {
+        await console.log(`Request:  ${req.body.Doctor_email} and ${req.body.YES}`);
+
+        await console.log(`Request:  ${req.body.Doctor_email} and ${req.body.NO}`);
+
+        //using for each
+        var available = "YES";
+        await this.process(req, available).catch(e => {
+            console.log(`${e}`)
+        });
+        available = "NO";
+        await this.process(req, available).catch(e => {
+            console.log(`${e}`)
+        });    
+        //res.json("Data Updated");
     }
-
-// Create and Update the working hours of doctor. 
-async createWorkingHoursDoctor(req, res) {
-    await console.log(`Request:  ${req.body.Doctor_email} and ${req.body.YES}`);
-
-    await console.log(`Request:  ${req.body.Doctor_email} and ${req.body.NO}`);
-
-    //using for each
-    var available = "YES";
-    await this.process(req, available).catch(e => {
-        console.log(`${e}`)
-    });
-    available = "NO";
-    await this.process(req, available).catch(e => {
-        console.log(`${e}`)
-    });    
-    //res.json("Data Updated");
-}
 
     async process(req, available) {
         if(available == "YES"){

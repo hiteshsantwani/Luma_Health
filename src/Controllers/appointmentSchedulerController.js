@@ -31,11 +31,12 @@ const bookDoctorOpening = async (req, res) => {
 	}
 }
 
-const createWorkingHoursDoctor = async (req, res) => {
+const createUpdateWorkingHoursDoctor = async (req, res) => {
     try {
-        console.log(`In side createWorkingHoursDoctor Controller`)
-		await appointmentSchedulerService.createWorkingHoursDoctor(req, res);
-		console.log(`Executed the createWorkingHoursDoctor`)
+        console.log(`In side createUpdateWorkingHoursDoctor Controller`)
+		await appointmentSchedulerService.createUpdateWorkingHoursDoctor(req, res);
+		console.log(`Executed the createUpdateWorkingHoursDoctor`)
+		await appointmentSchedulerService.dropAppointments(req, res);
 	} catch (err) {
 		res.statusCode = 500;
 		return res.send(err);
@@ -46,5 +47,5 @@ module.exports = {
     addNewDoctor,
     getWorkingHoursDoctor,
     bookDoctorOpening,
-    createWorkingHoursDoctor
+    createUpdateWorkingHoursDoctor
 }
