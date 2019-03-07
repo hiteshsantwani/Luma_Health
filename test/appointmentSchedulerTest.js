@@ -78,8 +78,6 @@ describe('AppointmentScheduler', () => {
           should.exist(res.body);
           res.should.have.status(200);
           res.body.should.be.a('Array');
-          // res.body.should.have.property('Day');
-          // res.body.should.have.property('Available');
           done();
         });
       });
