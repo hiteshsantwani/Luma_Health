@@ -84,7 +84,9 @@ class AppointmentSchedulerService {
         available = "NO";
         await this.process(req, available).catch(e => {
             console.log(`${e}`)
-        });    
+        });
+
+        res.json("Successfully Created and Updated the Schedule");
     }
 
     async process(req, available) {
