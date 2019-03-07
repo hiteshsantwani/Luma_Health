@@ -46,7 +46,7 @@ class AppointmentSchedulerService {
 
     async bookDoctorOpening(req, res){
     console.log(`${req.body}`)
-        Doctor_Detail.findOneAndUpdate({
+        await Doctor_Detail.findOneAndUpdate({
             "Doctor_email": req.body.Doctor_email,
             "Availabilty": {
                 "$elemMatch":{
@@ -67,6 +67,7 @@ class AppointmentSchedulerService {
             }).catch(e => {
                 console.log(`${e}`)
             });
+            res.json("Appointment successfully Created");
         }
 
     // Create and Update the working hours of doctor. 

@@ -4,6 +4,8 @@
 
 npm install doctorappointmentscheduler
 
+# Postman Test Cases are included in this repo under Postman directory
+
 ### Technical and Functional Design is mentioned and expanded on the Readme.
 
 The solution for this library is punlished on public npm repo.
@@ -98,6 +100,7 @@ This will also update the exsisting entries for eg:
 
 if the earlier "NO : 9/9/2018" but since now the user has posted the new schedule as : YES : 9/9/2018 this will update the info in the schedule.
 
-
-
-
+# Tests:
+ I am following the BDD.
+ Mocha and chai are used for test cases.
+ You can clone the repo on the local and load the test config from config folder.
