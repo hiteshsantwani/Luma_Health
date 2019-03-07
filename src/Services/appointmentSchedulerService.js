@@ -84,7 +84,6 @@ class AppointmentSchedulerService {
         await this.process(req, available).catch(e => {
             console.log(`${e}`)
         });    
-        //res.json("Data Updated");
     }
 
     async process(req, available) {

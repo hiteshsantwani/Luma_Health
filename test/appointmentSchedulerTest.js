@@ -30,36 +30,8 @@ describe('AppointmentScheduler', () => {
          });
          done();	
 	});
+ 
  /*
-  * Test the /GET route
-  */
-  describe('/GET/:Email getWorkingHoursDoctor', () => {
-	  it('it should GET the Working hours of Doctor with Availability Information', (done) => {
-
-        let Doctor = new Doctor_Detail_model({
-            // Create the new object and save it in DB
-            Doctor_email: "hiteshka@buffalo.edu",
-            Speciality: "ENT",
-            Availabilty: [{"Day" : "1/1/1 0:0:0", "Available" : "YES"}, 
-            {"Day" : "2/1/2 0:0:0", "Available" : "NO"}] });
-            Doctor.save((err, doctor) => {
-              
-        chai.request(server)
-        .get('/getWorkingHoursDoctor/' + Doctor.Doctor_email)
-        .send(Doctor.Availabilty)
-        .end((err, res) => {
-            should.exist(res.body);
-            res.should.have.status(200);
-            res.body.should.be.a('Array');
-            // res.body.should.have.property('Day');
-            // res.body.should.have.property('Available');
-            done();
-          });
-        });
-	  });
-  });
-
-/*
   * Test the /POST route
   */
  describe('/POST AddDoctor', () => {
@@ -85,8 +57,36 @@ describe('AppointmentScheduler', () => {
       });
   });
 });
+ /*
+  * Test the /GET route
+  */
+ describe('/GET/:Email getWorkingHoursDoctor', () => {
+  it('it should GET the Working hours of Doctor with Availability Information', (done) => {
 
-/*
+      let Doctor = new Doctor_Detail_model({
+          // Create the new object and save it in DB
+          Doctor_email: "hiteshka@buffalo.edu",
+          Speciality: "ENT",
+          Availabilty: [{"Day" : "1/1/1 0:0:0", "Available" : "YES"}, 
+          {"Day" : "2/1/2 0:0:0", "Available" : "NO"}] });
+          Doctor.save((err, doctor) => {
+            
+      chai.request(server)
+      .get('/getWorkingHoursDoctor/' + Doctor.Doctor_email)
+      .send(Doctor.Availabilty)
+      .end((err, res) => {
+          should.exist(res.body);
+          res.should.have.status(200);
+          res.body.should.be.a('Array');
+          // res.body.should.have.property('Day');
+          // res.body.should.have.property('Available');
+          done();
+        });
+      });
+  });
+});
+
+ /*
   * Test the /POST route
   */
  describe('/POST bookWorkingHoursDoctor', () => {
@@ -111,6 +111,49 @@ describe('AppointmentScheduler', () => {
         res.body.should.have.property('Speciality');
         done();
       });
+  });
+});
+
+/*
+  * Test the /POST route
+  */
+ describe('/POST createUpdateWorkingHoursDoctor', () => {
+  it('it should create the Working hours and availability of Doctor' +
+  'in case if the doctor already has the working hours and date scheduled then' +
+   'it should update the schedule with new availabilty', (done) => {
+
+      let Doctor = new Doctor_Detail_model({
+        // Create the new object and save it in DB
+        Doctor_email: "hiteshka@buffalo.edu",
+        Speciality: "ENT",
+        Availabilty: [{"Day" : "1/1/1 0:0:0", "Available" : "YES"}, 
+        {"Day" : "2/1/2 0:0:0", "Available" : "NO"}] });
+
+    Doctor.save((err, doctor) => {
+    chai.request(server)
+    .post('/getWorkingHoursDoctor/' + Doctor.Doctor_email)
+    .set('content-type', 'application/x-www-form-urlencoded')
+    .send({Doctor_email:'hiteshka@buffalo.edu',
+      NO:'2001-01-02 20:00:00.00',
+      NO:'2001-01-02 21:00:00.00',
+      NO:'2001-01-02 22:00:00.00',
+      NO:'2001-01-02 23:00:00.00',
+      YES:'2001-01-02 23:20:00.00',
+      YES:'2001-01-02 14:00:00.00',
+      YES:'2001-01-02 15:00:04.00',
+      YES:'2001-01-02 16:00:40.00',
+      YES:'2001-01-02 17:00:03.00',
+      NO:'2001-01-02 23:00:02.00',
+      YES:'2001-01-02 23:20:10.00',
+      YES:'2001-01-02 14:00:20.00',
+      YES:'2001-01-02 15:00:40.00'})
+    .end((err, res) => {
+        Doctor_Detail_model.find({
+          "Doctor_email": "hiteshka@buffalo.edu"
+        })
+        done();
+      });
+    });
   });
 });
 
