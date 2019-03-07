@@ -69,19 +69,6 @@ class AppointmentSchedulerService {
             });
         }
 
-    async dropAppointments(req, res) {
-        
-            await console.log(`Dropping following from appointment collection if they exist:  ${req.body.Doctor_email} and ${req.body.NO}`);
-            req.body.NO.forEach(async (element) => {
-                await Appointment_Detail.remove({
-                    "Doctor_email": req.body.Doctor_email,
-                    "A_Date": new Date(element)
-                }).catch(e => {
-                    console.log(`${e}`);
-                })
-            })
-        }
-
     // Create and Update the working hours of doctor. 
     async createUpdateWorkingHoursDoctor(req, res) {
         await console.log(`Request:  ${req.body.Doctor_email} and ${req.body.YES}`);
